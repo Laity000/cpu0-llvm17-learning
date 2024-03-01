@@ -1,0 +1,22 @@
+// Free usage license, author: Chung-Shu Chen 陳鍾樞
+// dot -Tpng asmDfdEx.gv -oasmDfdEx.png
+
+digraph G {
+  rankdir=LR;
+  subgraph cluster_2 {
+    style=filled;
+//    label = "Assemble flow, for instance: add $v1, $v0, $at";
+    subgraph clusterA {
+      label = "asmParser";
+      node [style=filled,color=white]; ParseInstruction [label="ParseInstruction()"];
+      node [style=filled,color=white]; MatchAndEmitInstruction [label="MatchAndEmitInstruction()"];
+      ParseInstruction -> MatchAndEmitInstruction [ label = "Operands:\n (Cpu0::ADD, Cpu0::V1,\n Cpu0::AT, Cpu0::V0)" ];
+    }
+    subgraph clusterB {
+      label = "encoder: Cpu0MCCodeEmitter.cpp";
+      node [style=filled,color=white]; encodeInstruction [label="encodeInstruction()"];
+    }
+    MatchAndEmitInstruction -> encodeInstruction [ label = "Inst.Opcode=\nCpu0::ADD,\nInst.Operand[0] = V1,\nInst.Operand[1] = AT,\nInst.Operand[2] = V0" ];
+    color=lightgrey
+  }
+}
